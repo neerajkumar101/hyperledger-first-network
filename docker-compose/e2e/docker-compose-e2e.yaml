@@ -1,0 +1,83 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+networks:
+  byfn:
+services:
+  ca0:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-leftorg1
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/75e3f9b6a9121fee01ff560f5d064462c5d70812c95313b7b66759c1e0fcd4c8_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/75e3f9b6a9121fee01ff560f5d064462c5d70812c95313b7b66759c1e0fcd4c8_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/leftorg1.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerLeftOrg1
+    networks:
+      - byfn
+
+  ca1:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-rightorg2
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/33adf58e895f52f2cadd8a9ec875b7ab5ddeab0c3ab6d9110f48156f81ba642b_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/33adf58e895f52f2cadd8a9ec875b7ab5ddeab0c3ab6d9110f48156f81ba642b_sk -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/rightorg2.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerRightOrg2
+    networks:
+      - byfn
+
+  orderer.created.com:
+    extends:
+      file:   ../base/docker-compose-base.yaml
+      service: orderer.created.com
+    container_name: orderer.created.com
+    networks:
+      - byfn
+
+  peer0.leftorg1.created.com:
+    container_name: peer0.leftorg1.created.com
+    extends:
+      file:  ../base/docker-compose-base.yaml
+      service: peer0.leftorg1.created.com
+    networks:
+      - byfn
+
+  peer1.leftorg1.created.com:
+    container_name: peer1.leftorg1.created.com
+    extends:
+      file:  ../base/docker-compose-base.yaml
+      service: peer1.leftorg1.created.com
+    networks:
+      - byfn
+
+  peer0.rightorg2.created.com:
+    container_name: peer0.rightorg2.created.com
+    extends:
+      file:  ../base/docker-compose-base.yaml
+      service: peer0.rightorg2.created.com
+    networks:
+      - byfn
+
+  peer1.rightorg2.created.com:
+    container_name: peer1.rightorg2.created.com
+    extends:
+      file:  ../base/docker-compose-base.yaml
+      service: peer1.rightorg2.created.com
+    networks:
+      - byfn
