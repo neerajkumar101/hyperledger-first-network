@@ -1,0 +1,1 @@
+composer identity import -p hlfv1 -u admin -c ./ordererOrganizations/created.com/users/Admin@created.com/msp/signcerts/Admin@created.com-cert.pem -k ./ordererOrganizations/created.com/users/Admin@created.com/msp/keystore/032d81fbdc990eeac1cc1f2dd51fec21eb3550428399cfc73f9cb036b39383cf_sk
