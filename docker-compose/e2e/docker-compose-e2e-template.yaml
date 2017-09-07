@@ -6,7 +6,7 @@
 version: '2'
 
 networks:
-  byfn:
+  testnet:
 services:
   ca0:
     image: hyperledger/fabric-ca
@@ -20,10 +20,10 @@ services:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/leftorg1.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerLeftOrg1
     networks:
-      - byfn
+      - testnet
 
   ca1:
     image: hyperledger/fabric-ca
@@ -37,10 +37,10 @@ services:
       - "8054:7054"
     command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/rightorg2.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerRightOrg2
     networks:
-      - byfn
+      - testnet
 
   orderer.created.com:
     extends:
@@ -48,7 +48,7 @@ services:
       service: orderer.created.com
     container_name: orderer.created.com
     networks:
-      - byfn
+      - testnet
 
   peer0.leftorg1.created.com:
     container_name: peer0.leftorg1.created.com
@@ -56,7 +56,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer0.leftorg1.created.com
     networks:
-      - byfn
+      - testnet
 
   peer1.leftorg1.created.com:
     container_name: peer1.leftorg1.created.com
@@ -64,7 +64,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer1.leftorg1.created.com
     networks:
-      - byfn
+      - testnet
 
   peer0.rightorg2.created.com:
     container_name: peer0.rightorg2.created.com
@@ -72,7 +72,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer0.rightorg2.created.com
     networks:
-      - byfn
+      - testnet
 
   peer1.rightorg2.created.com:
     container_name: peer1.rightorg2.created.com
@@ -80,4 +80,4 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer1.rightorg2.created.com
     networks:
-      - byfn
+      - testnet

@@ -6,9 +6,42 @@
 version: '2'
 
 networks:
-  byfn:
+  testnet:
 
 services:
+  ca.leftorg1.created.com:
+    image: hyperledger/fabric-ca:x86_64-1.0.1
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-leftorg1
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3f6e2d11cfca99b95f3df437a2edf9430d24637dfa3fef5d9b64b95c845efbdd_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3f6e2d11cfca99b95f3df437a2edf9430d24637dfa3fef5d9b64b95c845efbdd_sk -b admin:adminpw -d'
+    volumes:
+      - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/ca/:/etc/hyperledger/fabric-ca-server-config/
+    container_name: ca.leftorg1.created.com
+    networks:
+      - testnet
+
+  ca.rightorg2.created.com:
+    image: hyperledger/fabric-ca:x86_64-1.0.1
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-rightorg2
+      - FABRIC_CA_SERVER_TLS_ENABLED=false
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/70338ebb72fab5adbee130c283209b66c890e4d776bf2e249bab51447c766b13_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/70338ebb72fab5adbee130c283209b66c890e4d776bf2e249bab51447c766b13_sk -b admin:adminpw -d'
+    volumes:
+      - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca.rightorg2.created.com
+    networks:
+      - testnet
 
   orderer.created.com:
     extends:
@@ -16,7 +49,7 @@ services:
       service: orderer.created.com
     container_name: orderer.created.com
     networks:
-      - byfn
+      - testnet
 
   peer0.leftorg1.created.com:
     container_name: peer0.leftorg1.created.com
@@ -24,7 +57,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer0.leftorg1.created.com
     networks:
-      - byfn
+      - testnet
 
   peer1.leftorg1.created.com:
     container_name: peer1.leftorg1.created.com
@@ -32,7 +65,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer1.leftorg1.created.com
     networks:
-      - byfn
+      - testnet
 
   peer0.rightorg2.created.com:
     container_name: peer0.rightorg2.created.com
@@ -40,7 +73,7 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer0.rightorg2.created.com
     networks:
-      - byfn
+      - testnet
 
   peer1.rightorg2.created.com:
     container_name: peer1.rightorg2.created.com
@@ -48,11 +81,11 @@ services:
       file:  ../base/docker-compose-base.yaml
       service: peer1.rightorg2.created.com
     networks:
-      - byfn
+      - testnet
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools
+    image: hyperledger/fabric-tools:x86_64-1.0.1
     tty: true
     environment:
       - GOPATH=/opt/gopath
@@ -61,10 +94,10 @@ services:
       - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.leftorg1.created.com:7051
       - CORE_PEER_LOCALMSPID=LeftOrg1MSP
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/ca.crt
+      - CORE_PEER_TLS_ENABLED=false
+      # - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/users/Admin@leftorg1.created.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; sleep $TIMEOUT; '
@@ -81,5 +114,4 @@ services:
       - peer0.rightorg2.created.com
       - peer1.rightorg2.created.com
     networks:
-      - byfn
-
+      - testnet

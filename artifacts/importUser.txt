@@ -1,0 +1,1 @@
+composer identity import -p hlfv1 -u PeerAdmin -c ./peerOrganizations/leftorg1.created.com/users/Admin@leftorg1.created.com/msp/signcerts/Admin@leftorg1.created.com-cert.pem -k ./peerOrganizations/leftorg1.created.com/users/Admin@leftorg1.created.com/msp/keystore/dda8a19e910482fba798520c32bbee6d856d0033e8519ae922af1d3268c8bc37_sk

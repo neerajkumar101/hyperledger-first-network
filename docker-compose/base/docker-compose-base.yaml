@@ -9,7 +9,7 @@ services:
 
   orderer.created.com:
     container_name: orderer.created.com
-    image: hyperledger/fabric-orderer
+    image: hyperledger/fabric-orderer:x86_64-1.0.1
     environment:
       - ORDERER_GENERAL_LOGLEVEL=debug
       - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
@@ -18,16 +18,16 @@ services:
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
       # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_TLS_ENABLED=false
+      # - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      # - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      # - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
     - ../../artifacts/channel/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
     - ../../artifacts/channel/crypto-config/ordererOrganizations/created.com/orderers/orderer.created.com/msp:/var/hyperledger/orderer/msp
-    - ../../artifacts/channel/crypto-config/ordererOrganizations/created.com/orderers/orderer.created.com/tls/:/var/hyperledger/orderer/tls
+    # - ../../artifacts/channel/crypto-config/ordererOrganizations/created.com/orderers/orderer.created.com/tls/:/var/hyperledger/orderer/tls
     ports:
       - 7050:7050
 
@@ -38,13 +38,14 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer0.leftorg1.created.com
+      - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_ADDRESS=peer0.leftorg1.created.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.leftorg1.created.com:7051
       - CORE_PEER_LOCALMSPID=LeftOrg1MSP
     volumes:
         - /var/run/:/host/var/run/
         - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/msp:/etc/hyperledger/fabric/msp
-        - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls:/etc/hyperledger/fabric/tls
+        # - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 7051:7051
       - 7053:7053
@@ -56,6 +57,7 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer1.leftorg1.created.com
+      - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_ADDRESS=peer1.leftorg1.created.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.leftorg1.created.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.leftorg1.created.com:7051
@@ -63,7 +65,7 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer1.leftorg1.created.com/msp:/etc/hyperledger/fabric/msp
-        - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer1.leftorg1.created.com/tls:/etc/hyperledger/fabric/tls
+        # - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer1.leftorg1.created.com/tls:/etc/hyperledger/fabric/tls
 
     ports:
       - 8051:7051
@@ -76,6 +78,7 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer0.rightorg2.created.com
+      - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_ADDRESS=peer0.rightorg2.created.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.rightorg2.created.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.rightorg2.created.com:7051
@@ -83,7 +86,7 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer0.rightorg2.created.com/msp:/etc/hyperledger/fabric/msp
-        - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer0.rightorg2.created.com/tls:/etc/hyperledger/fabric/tls
+        # - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer0.rightorg2.created.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 9051:7051
       - 9053:7053
@@ -95,6 +98,7 @@ services:
       service: peer-base
     environment:
       - CORE_PEER_ID=peer1.rightorg2.created.com
+      - CORE_PEER_ENDORSER_ENABLED=true
       - CORE_PEER_ADDRESS=peer1.rightorg2.created.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.rightorg2.created.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.rightorg2.created.com:7051
@@ -102,7 +106,7 @@ services:
     volumes:
         - /var/run/:/host/var/run/
         - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer1.rightorg2.created.com/msp:/etc/hyperledger/fabric/msp
-        - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer1.rightorg2.created.com/tls:/etc/hyperledger/fabric/tls
+        # - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/peers/peer1.rightorg2.created.com/tls:/etc/hyperledger/fabric/tls
     ports:
       - 10051:7051
       - 10053:7053

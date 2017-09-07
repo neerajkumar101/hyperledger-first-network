@@ -10,11 +10,12 @@ echo
 echo "Build your first network (BYFN) end-to-end test"
 echo
 CHANNEL_NAME="$1"
-: ${CHANNEL_NAME:="mychannel"}
+: ${CHANNEL_NAME:="newchannel"}
 : ${TIMEOUT:="60"}
 COUNTER=1
 MAX_RETRY=5
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/created.com/orderers/orderer.created.com/msp/tlscacerts/tlsca.created.com-cert.pem
+# ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/created.com/orderers/orderer.created.com/msp/tlscacerts/tlsca.created.com-cert.pem
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/created.com/orderers/orderer.created.com/msp/cacerts/ca.created.com-cert.pem
 
 echo "Channel name : "$CHANNEL_NAME
 
@@ -32,7 +33,7 @@ setGlobals () {
 
 	if [ $1 -eq 0 -o $1 -eq 1 ] ; then
 		CORE_PEER_LOCALMSPID="LeftOrg1MSP"
-		CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/ca.crt
+		# CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/peers/peer0.leftorg1.created.com/tls/ca.crt
 		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/leftorg1.created.com/users/Admin@leftorg1.created.com/msp
 		if [ $1 -eq 0 ]; then
 			CORE_PEER_ADDRESS=peer0.leftorg1.created.com:7051
@@ -42,7 +43,7 @@ setGlobals () {
 		fi
 	else
 		CORE_PEER_LOCALMSPID="RightOrg2MSP"
-		CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/rightorg2.created.com/peers/peer0.rightorg2.created.com/tls/ca.crt
+		# CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/rightorg2.created.com/peers/peer0.rightorg2.created.com/tls/ca.crt
 		CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/rightorg2.created.com/users/Admin@rightorg2.created.com/msp
 		if [ $1 -eq 2 ]; then
 			CORE_PEER_ADDRESS=peer0.rightorg2.created.com:7051
@@ -200,30 +201,30 @@ echo "Updating anchor peers for rightorg2..."
 updateAnchorPeers 2
 
 ## Install chaincode on Peer0/LeftOrg1 and Peer2/Org2
-echo "Installing chaincode on peer0/leftorg1..."
-installChaincode 0
-echo "Install chaincode on peer2/rightorg2..."
-installChaincode 2
+# echo "Installing chaincode on peer0/leftorg1..."
+# installChaincode 0
+# echo "Install chaincode on peer2/rightorg2..."
+# installChaincode 2
 
 #Instantiate chaincode on Peer2/Org2
-echo "Instantiating chaincode on peer2/rightorg2..."
-instantiateChaincode 2
+# echo "Instantiating chaincode on peer2/rightorg2..."
+# instantiateChaincode 2
 
 #Query on chaincode on Peer0/Org1
-echo "Querying chaincode on peer0/leftorg1..."
-chaincodeQuery 0 100
+# echo "Querying chaincode on peer0/leftorg1..."
+# chaincodeQuery 0 100
 
 #Invoke on chaincode on Peer0/Org1
-echo "Sending invoke transaction on peer0/leftorg1..."
-chaincodeInvoke 0
+# echo "Sending invoke transaction on peer0/leftorg1..."
+# chaincodeInvoke 0
 
 ## Install chaincode on Peer3/Org2
-echo "Installing chaincode on peer3/rightorg2..."
-installChaincode 3
+# echo "Installing chaincode on peer3/rightorg2..."
+# installChaincode 3
 
 #Query on chaincode on Peer3/Org2, check if the result is 90
-echo "Querying chaincode on peer3/rightorg2..."
-chaincodeQuery 3 90
+# echo "Querying chaincode on peer3/rightorg2..."
+# chaincodeQuery 3 90
 
 echo
 echo "========= All GOOD, BYFN execution completed =========== "

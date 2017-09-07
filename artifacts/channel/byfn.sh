@@ -146,6 +146,7 @@ function replacePrivateKey () {
 
   # Copy the template to the file that will be modified to add the private key
   cp ../../docker-compose/e2e/docker-compose-e2e-template.yaml ../../docker-compose/e2e/docker-compose-e2e.yaml
+  cp ../../docker-compose/cli-config/docker-compose-cli-template.yaml ../../docker-compose/cli-config/docker-compose-cli.yaml
 
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
@@ -154,10 +155,14 @@ function replacePrivateKey () {
   PRIV_KEY=$(ls *_sk)
   cd $CURRENT_DIR
   sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" ../../docker-compose/e2e/docker-compose-e2e.yaml
+  sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" ../../docker-compose/cli-config/docker-compose-cli.yaml
+  
   cd crypto-config/peerOrganizations/rightorg2.created.com/ca/
   PRIV_KEY=$(ls *_sk)
   cd $CURRENT_DIR
   sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" ../../docker-compose/e2e/docker-compose-e2e.yaml
+  sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" ../../docker-compose/cli-config/docker-compose-cli.yaml
+  
   # If MacOSX, remove the temporary backup of the docker-compose file
   if [ "$ARCH" == "Darwin" ]; then
     rm ../../docker-compose/e2e/docker-compose-e2e.yamlt
@@ -193,6 +198,7 @@ function generateCerts (){
   echo "##### Generate certificates using cryptogen tool #########"
   echo "##########################################################"
 
+  rm -r crypto-config
   cryptogen generate --config=./crypto-config.yaml
   if [ "$?" -ne 0 ]; then
     echo "Failed to generate certificates..."
@@ -252,6 +258,9 @@ function generateChannelArtifacts() {
   # Note: For some unknown reason (at least for now) the block file can't be
   # named orderer.genesis.block or the orderer will fail to launch!
   configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+  
+  configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis_block.pb
+
   if [ "$?" -ne 0 ]; then
     echo "Failed to generate orderer genesis block..."
     exit 1
