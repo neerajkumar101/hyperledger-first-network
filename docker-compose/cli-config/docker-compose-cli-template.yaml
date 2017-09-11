@@ -15,7 +15,7 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-leftorg1
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca.leftorg1.created.com-cert.pem
       # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
     ports:
       - "7054:7054"
@@ -32,7 +32,7 @@ services:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca-rightorg2
       - FABRIC_CA_SERVER_TLS_ENABLED=false
-      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem
+      # - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/tlsca.rightorg2.created.com-cert.pem
       # - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
     ports:
       - "8054:7054"
@@ -51,11 +51,56 @@ services:
     networks:
       - testnet
 
+  couchdb0:
+    container_name: couchdb0
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for created map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "7984:5984"
+    networks:
+      - testnet
+  
+  couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for created map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "8984:5984"
+    networks:
+      - testnet
+  
+  couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for created map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "9984:5984"
+    networks:
+      - testnet
+
+  couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
+    # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
+    # for created map it to utilize Fauxton User Interface in dev environments.
+    ports:
+      - "10984:5984"
+    networks:
+      - testnet
+  
   peer0.leftorg1.created.com:
     container_name: peer0.leftorg1.created.com
     extends:
       file:  ../base/docker-compose-base.yaml
       service: peer0.leftorg1.created.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+    depends_on:
+      - couchdb0
     networks:
       - testnet
 
@@ -64,6 +109,11 @@ services:
     extends:
       file:  ../base/docker-compose-base.yaml
       service: peer1.leftorg1.created.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+    depends_on:
+      - couchdb1
     networks:
       - testnet
 
@@ -72,6 +122,11 @@ services:
     extends:
       file:  ../base/docker-compose-base.yaml
       service: peer0.rightorg2.created.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
+    depends_on:
+      - couchdb2
     networks:
       - testnet
 
@@ -80,6 +135,11 @@ services:
     extends:
       file:  ../base/docker-compose-base.yaml
       service: peer1.rightorg2.created.com
+    environment:
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
+    depends_on:
+      - couchdb3
     networks:
       - testnet
 
@@ -113,5 +173,18 @@ services:
       - peer1.leftorg1.created.com
       - peer0.rightorg2.created.com
       - peer1.rightorg2.created.com
+    networks:
+      - testnet
+
+  couchdb:
+    container_name: couchdb
+    image: hyperledger/fabric-couchdb:x86_64-1.0.0
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
     networks:
       - testnet

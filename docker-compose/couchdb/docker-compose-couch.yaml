@@ -6,18 +6,18 @@
 version: '2'
 
 networks:
-  byfn:
+  testnet:
 
 services:
   couchdb0:
     container_name: couchdb0
-    image: hyperledger/fabric-couchdb
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for created map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "5984:5984"
     networks:
-      - byfn
+      - testnet
 
   peer0.leftorg1.created.com:
     environment:
@@ -28,13 +28,13 @@ services:
 
   couchdb1:
     container_name: couchdb1
-    image: hyperledger/fabric-couchdb
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for created map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "6984:5984"
     networks:
-      - byfn
+      - testnet
 
   peer1.leftorg1.created.com:
     environment:
@@ -45,13 +45,13 @@ services:
 
   couchdb2:
     container_name: couchdb2
-    image: hyperledger/fabric-couchdb
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for created map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "7984:5984"
     networks:
-      - byfn
+      - testnet
 
   peer0.rightorg2.created.com:
     environment:
@@ -62,13 +62,13 @@ services:
 
   couchdb3:
     container_name: couchdb3
-    image: hyperledger/fabric-couchdb
+    image: hyperledger/fabric-couchdb:x86_64-1.0.1
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for created map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "8984:5984"
     networks:
-      - byfn
+      - testnet
 
   peer1.rightorg2.created.com:
     environment:

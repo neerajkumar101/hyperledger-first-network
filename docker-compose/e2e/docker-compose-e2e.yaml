@@ -15,10 +15,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-leftorg1
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/3f6e2d11cfca99b95f3df437a2edf9430d24637dfa3fef5d9b64b95c845efbdd_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/dc5a3d5f358c0fb3b676bfafd72bf152f2461e9acbe1424727817609ed19a216_sk
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/3f6e2d11cfca99b95f3df437a2edf9430d24637dfa3fef5d9b64b95c845efbdd_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.leftorg1.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/dc5a3d5f358c0fb3b676bfafd72bf152f2461e9acbe1424727817609ed19a216_sk -b admin:adminpw -d'
     volumes:
       - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerLeftOrg1
@@ -32,10 +32,10 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca-rightorg2
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/70338ebb72fab5adbee130c283209b66c890e4d776bf2e249bab51447c766b13_sk
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/2c5241ac79b9a03a0ddd8aa113ebb01cd278461a6fee4dfff082b77a85c7fdc7_sk
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/70338ebb72fab5adbee130c283209b66c890e4d776bf2e249bab51447c766b13_sk -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.rightorg2.created.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/2c5241ac79b9a03a0ddd8aa113ebb01cd278461a6fee4dfff082b77a85c7fdc7_sk -b admin:adminpw -d'
     volumes:
       - ../../artifacts/channel/crypto-config/peerOrganizations/rightorg2.created.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca_peerRightOrg2

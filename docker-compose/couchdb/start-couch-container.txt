@@ -1,0 +1,1 @@
+CHANNEL_NAME=mychannel TIMEOUT=1000 docker-compose -f ../cli-config/docker-compose-cli.yaml -f docker-compose-couch.yaml up -d

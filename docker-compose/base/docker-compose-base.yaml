@@ -66,7 +66,6 @@ services:
         - /var/run/:/host/var/run/
         - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer1.leftorg1.created.com/msp:/etc/hyperledger/fabric/msp
         # - ../../artifacts/channel/crypto-config/peerOrganizations/leftorg1.created.com/peers/peer1.leftorg1.created.com/tls:/etc/hyperledger/fabric/tls
-
     ports:
       - 8051:7051
       - 8053:7053

@@ -16,7 +16,7 @@ COUNTER=1
 MAX_RETRY=5
 # ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/created.com/orderers/orderer.created.com/msp/tlscacerts/tlsca.created.com-cert.pem
 ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/created.com/orderers/orderer.created.com/msp/cacerts/ca.created.com-cert.pem
-
+# 
 echo "Channel name : "$CHANNEL_NAME
 
 # verify the result of the end-to-end test
